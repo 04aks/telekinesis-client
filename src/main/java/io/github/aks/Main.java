@@ -3,22 +3,24 @@ import io.github.aks.calls.Call;
 import io.github.aks.calls.UploadFileCall;
 import io.github.aks.client.ClientConnection;
 import io.github.aks.config.ClientConfig;
-
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.net.Socket;
+
 
 public class Main {
     public static void main(String[] args) {
+        // DEFAULTS
         String serverIP = "192.168.1.8";
         int port = 5000;
-        File file = new File("src\\main\\resources\\aot-red-swan.mp4");
-        System.out.println(file.exists());
+        String filePath = "src\\main\\resources\\canute.jpg";
+
+        // args  given
+        if(args.length > 0) serverIP = args[0];
+        if(args.length > 1) port = Integer.parseInt(args[1]);
+        if(args.length > 2) filePath = args[2];
+
+        File file = new File(filePath);
+        if(! file.exists()) throw new IllegalArgumentException("File Does not Exist.");
 
         ClientConfig config = new ClientConfig(serverIP, port);
         try(ClientConnection clientConnection = new ClientConnection(config)){
