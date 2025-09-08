@@ -65,6 +65,7 @@ public class MainPanel extends JPanel implements ActionListener {
 
     void chooseFile(JButton button, JTextField textField){
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         button.addActionListener(e -> {
             int result = fileChooser.showOpenDialog(frame);
             if(result == JFileChooser.APPROVE_OPTION){

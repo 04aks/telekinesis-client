@@ -1,6 +1,7 @@
 package io.github.aks.client;
 
 import io.github.aks.calls.Call;
+import io.github.aks.calls.UploadDirCall;
 import io.github.aks.calls.UploadFileCall;
 import io.github.aks.config.ClientConfig;
 
@@ -20,7 +21,8 @@ public class ItemUploader {
 
         ClientConfig config = new ClientConfig(serverIp, port);
         try(ClientConnection connection = new ClientConnection(config)){
-            Call upload = new UploadFileCall(file, connection);
+            Call upload = !file.isDirectory() ? new UploadFileCall(file, connection):
+                    new UploadDirCall(file, connection);
             upload.execute();
             System.out.println("Call ended.");
         }catch(Exception e){
