@@ -27,7 +27,9 @@ public class UploadDirCall implements Call{
         connection.sendHeader(header);
 
         String response = connection.readResponse();
-        if(response.equals("READY")) FileSender.sendDir(file, connection);
+        if(response.equals("READY")){
+            FileSender.sendDir(file, connection);
+        }
         else throw new IOException("Unexpected response: " + response);
     }
 }

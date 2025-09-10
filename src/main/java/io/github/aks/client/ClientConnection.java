@@ -9,32 +9,33 @@ import java.net.UnknownHostException;
 
 public class ClientConnection implements AutoCloseable{
     private final Socket socket;
-    private final PrintWriter writer;
-    private final BufferedReader reader;
-    private final OutputStream os;
+    private final DataOutputStream dos;
+    private final DataInputStream dis;
 
     public ClientConnection(ClientConfig config) throws ConnectionRefusedException {
         try{
             this.socket = new Socket(config.serverIp(), config.port());
-            this.os = socket.getOutputStream();
-            this.writer = new PrintWriter(os, true);
-            this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            this.dos = new DataOutputStream(socket.getOutputStream());
+            this.dis = new DataInputStream(socket.getInputStream());
 
         }catch(IOException e){
             throw new ConnectionRefusedException();
         }
     }
+    public void write(String msg) throws IOException{
+        dos.writeUTF(msg);
+    }
 
-    public void sendHeader(Header header){
-        writer.println(header.format());
+    public void sendHeader(Header header) throws IOException{
+        dos.writeUTF(header.format());
     }
 
     public String readResponse() throws IOException{
-        return reader.readLine();
+        return dis.readUTF();
     }
 
-    public OutputStream getOutputStream() {
-        return os;
+    public DataOutputStream getDataOutputStream() {
+        return dos;
     }
 
     @Override

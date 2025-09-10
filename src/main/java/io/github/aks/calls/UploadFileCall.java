@@ -22,7 +22,7 @@ public class UploadFileCall implements Call{
 
         String response = connection.readResponse();
         if(response.equals("READY")){
-            FileSender.sendFile(file, connection.getOutputStream());
+            FileSender.sendFile(file, connection);
         }
         else{
             throw new IOException("Unexpected response: " + response);
