@@ -2,7 +2,6 @@ package io.github.aks.util;
 
 import io.github.aks.client.ClientConnection;
 import io.github.aks.header.Header;
-
 import java.io.*;
 
 public class FileSender {
@@ -15,12 +14,29 @@ public class FileSender {
             }
         }
     }
-    public static void sendDir(String base, File file, ClientConnection connection) throws IOException{
+    public static void sendDir(File file, ClientConnection connection) throws IOException{
+        String base = file.getName();
+        File[] files = file.listFiles();
+        if(files == null) return;
 
-        if(file.isDirectory()){
-            Header header = new Header("DIR_UPLOAD", base + "/" + file.getName(), 0, "DISK");
+        Header header;
+        for(File f : files){
+            if(f.isDirectory()){
+
+                header = new Header("DIR_UPLOAD",
+                        base + "/" + f.getName(),
+                        f.length(),
+                        "DISK");
+            }
+            else{
+
+                header = new Header("FILE_UPLOAD",
+                        base + "/" + f.getName().replaceAll(" ", "_"),
+                        f.length(),
+                        "DISK");
+            }
+
             connection.sendHeader(header);
-            System.out.println("shoulda sent the header " + base + file.getName());
         }
     }
 }

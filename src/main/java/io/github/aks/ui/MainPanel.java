@@ -47,7 +47,7 @@ public class MainPanel extends JPanel implements ActionListener {
         JPanel filePanel = new JPanel();
         filePanel.setLayout(new BoxLayout(filePanel, BoxLayout.X_AXIS));
         filePathField = new JTextField();
-        filePathField.setEditable(false);
+//        filePathField.setEditable(false);
         JButton browseButton = new JButton("Browse");
         filePanel.add(filePathField);
         makeSpace(filePanel, 5, 0);

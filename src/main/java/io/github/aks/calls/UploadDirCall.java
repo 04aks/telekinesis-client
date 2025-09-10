@@ -18,20 +18,16 @@ public class UploadDirCall implements Call{
 
     @Override
     public void execute() throws IOException {
-        Header header = new Header("DIR_UPLOAD", file.getName().replaceAll(" ", "_"), file.length(), "DISK");
+
+        Header header = new Header("DIR_UPLOAD",
+                file.getName().replaceAll(" ", "_"),
+                file.length(),
+                "DISK");
+
         connection.sendHeader(header);
 
-        File[] files = file.listFiles();
-        if(files == null) return;
-
         String response = connection.readResponse();
-        if(response.equals("READY")){
-            for(File f : files){
-                FileSender.sendDir(file.getName(), f, connection);
-            }
-        }
-        else{
-            throw new IOException("Unexpected response: " + response);
-        }
+        if(response.equals("READY")) FileSender.sendDir(file, connection);
+        else throw new IOException("Unexpected response: " + response);
     }
 }
