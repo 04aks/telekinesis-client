@@ -8,16 +8,18 @@ public class HostDiscoveryWorker extends SwingWorker<List<String>, Void> {
 
     private final String subnet;
     private final int timeout;
-    private final JComboBox<String>  comboBox;
+    private final MainPanel panel;
 
-    public HostDiscoveryWorker(String subnet, int timeout, JComboBox<String> comboBox) {
+    public HostDiscoveryWorker(String subnet, int timeout, MainPanel panel) {
         this.subnet = subnet;
         this.timeout = timeout;
-        this.comboBox = comboBox;
+        this.panel = panel;
     }
 
     @Override
     protected List<String> doInBackground() throws Exception {
+        panel.getRefreshButton().setEnabled(false);
+        panel.getHosts().setEnabled(false);
         return PingSweep.discover(subnet, timeout);
     }
 
@@ -25,11 +27,12 @@ public class HostDiscoveryWorker extends SwingWorker<List<String>, Void> {
     protected void done() {
         try{
             List<String> hosts = get();
-            comboBox.removeAllItems();
+            panel.getHosts().removeAllItems();
             for(String host : hosts){
-                comboBox.addItem(host);
+                panel.getHosts().addItem(host);
             }
-            comboBox.enable();
+            panel.getHosts().setEnabled(true);
+            panel.getRefreshButton().setEnabled(true);
         }catch(Exception e){
             e.printStackTrace();
         }

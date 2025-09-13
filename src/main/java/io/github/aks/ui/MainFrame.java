@@ -9,9 +9,10 @@ public class MainFrame extends JFrame {
 
         MainPanel panel = new MainPanel(this);
         add(panel);
-        new HostDiscoveryWorker(subnet, timeout, panel.getHosts()).execute();
+        new HostDiscoveryWorker(subnet, timeout, panel).execute();
 
         setResizable(false);
+        setFocusable(true);
         setLocationRelativeTo(null);
         setVisible(true);
     }
